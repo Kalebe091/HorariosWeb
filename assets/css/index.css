@@ -1,0 +1,147 @@
+  :root{
+    --yellow:#F5A428;
+    --orange:#E97506;
+    --red:#E83F14;
+    --dark:#333333;
+    --dark2:#5c5c5c;
+    --cream:#FFFBF6;
+    --panel:#FFFFFF;
+    --tint:#FFF3E7;
+    --tint2:#FDE9D8;
+    --line:#F0DFCB;
+    --shadow: 0 8px 24px rgba(232,63,20,0.08);
+    --grad: linear-gradient(100deg, var(--yellow) 0%, var(--orange) 50%, var(--red) 100%);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{background:var(--cream); color:var(--dark); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;}
+  h1,h2,h3, .display{font-family:'Poppins',sans-serif;}
+
+  /* ---------- Header ---------- */
+  header{
+    background: var(--panel);
+    border-bottom: 5px solid transparent;
+    border-image: var(--grad) 1;
+    position: sticky; top:0; z-index:50;
+    box-shadow: var(--shadow);
+  }
+  .header-inner{
+    max-width: 1180px; margin:0 auto; padding: 14px 24px;
+    display:flex; align-items:center; gap:16px;
+  }
+  .header-inner img{height:56px; width:auto; display:block;}
+  .header-title{display:flex; flex-direction:column; line-height:1.15;}
+  .header-title .eyebrow{
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--orange); font-weight:700;
+  }
+  .header-title h1{font-size: 20px; font-weight:700; color:var(--dark);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    padding: 46px 24px 34px;
+    background: var(--tint);
+    border-bottom:1px solid var(--line);
+  }
+  .hero::before{
+    content:"";
+    position:absolute; right:-120px; top:-140px;
+    width:420px; height:420px;
+    background: var(--grad);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    opacity:.13;
+    transform: rotate(8deg);
+  }
+  .hero-inner{max-width:1180px; margin:0 auto; position:relative;}
+  .hero h2{font-size: clamp(26px,3.4vw,38px); font-weight:800; max-width:720px; color:var(--dark);}
+  .hero p{margin-top:10px; max-width:600px; color:var(--dark2); font-size:15.5px;}
+
+  /* ---------- Mode tabs ---------- */
+  .modes{
+    display:flex; gap:10px; margin-top:26px; flex-wrap:wrap;
+  }
+  .mode-btn{
+    display:flex; align-items:center; gap:8px;
+    padding:11px 18px; border-radius:999px; border:1.5px solid var(--line);
+    background:#fff; font-family:'Inter',sans-serif; font-weight:600; font-size:14px;
+    color:var(--dark2); cursor:pointer; transition:.18s ease;
+  }
+  .mode-btn svg{width:16px; height:16px; flex-shrink:0;}
+  .mode-btn:hover{border-color:var(--orange); color:var(--orange);}
+  .mode-btn.active{
+    background: var(--grad); border-color:transparent; color:#fff;
+    box-shadow: 0 6px 16px rgba(233,117,6,.28);
+  }
+
+  /* ---------- Main layout ---------- */
+  main{max-width:1180px; margin:0 auto; padding: 30px 24px 80px;}
+
+  .panel{
+    background: var(--panel); border:1px solid var(--line); border-radius:16px;
+    padding: 22px; box-shadow: var(--shadow);
+  }
+  .panel + .panel{margin-top:22px;}
+
+  .filters-title{font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--orange); margin-bottom:14px;}
+
+  .filter-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(170px,1fr)); gap:14px;}
+  .field label{display:block; font-size:12.5px; font-weight:600; color:var(--dark2); margin-bottom:6px;}
+  .field select, .field input{
+    width:100%; padding:10px 12px; border-radius:10px; border:1.5px solid var(--line);
+    background:#fffaf4; font-family:'Inter',sans-serif; font-size:14px; color:var(--dark);
+    transition:.15s;
+  }
+  .field select:focus, .field input:focus{outline:none; border-color:var(--orange); background:#fff;}
+
+  .filter-actions{display:flex; justify-content:space-between; align-items:center; margin-top:16px; flex-wrap:wrap; gap:10px;}
+  .result-count{font-size:13.5px; color:var(--dark2);}
+  .result-count b{color:var(--red);}
+  .clear-btn{
+    background:none; border:none; color:var(--orange); font-weight:600; font-size:13.5px; cursor:pointer;
+    text-decoration:underline; text-underline-offset:3px;
+  }
+  .clear-btn:hover{color:var(--red);}
+
+  /* quick search */
+  .quick-search{position:relative; margin-bottom:16px;}
+  .quick-search input{
+    width:100%; padding:13px 16px 13px 42px; border-radius:12px; border:1.5px solid var(--line);
+    font-size:15px; background:#fffaf4; font-family:'Inter',sans-serif;
+  }
+  .quick-search input:focus{outline:none; border-color:var(--orange); background:#fff;}
+  .quick-search svg{position:absolute; left:14px; top:50%; transform:translateY(-50%); width:18px; height:18px; color:var(--dark2);}
+
+  /* ---------- Table ---------- */
+  .table-wrap{overflow-x:auto; margin-top:22px; border-radius:14px; border:1px solid var(--line);}
+  table{width:100%; border-collapse:collapse; min-width:820px; background:#fff;}
+  thead th{
+    background: var(--grad); color:#fff; text-align:left; font-size:12.5px;
+    text-transform:uppercase; letter-spacing:.05em; padding:13px 14px; font-weight:700;
+    white-space:nowrap;
+  }
+  tbody td{padding:13px 14px; font-size:14px; border-bottom:1px solid var(--line); color:var(--dark); vertical-align:top;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:#FFFAF3;}
+  tbody tr:hover{background: var(--tint2);}
+  td.disciplina{font-weight:600; min-width:220px;}
+  td.dia{font-weight:700; color:var(--red);}
+  .badge{
+    display:inline-block; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px;
+    background:var(--tint); color:var(--orange); text-transform:uppercase; letter-spacing:.03em;
+  }
+  .badge.online{background:#E9F3FF; color:#1E63C9;}
+
+  .empty-state{padding:50px 20px; text-align:center; color:var(--dark2);}
+  .empty-state .tri{
+    width:46px; height:40px; margin:0 auto 14px; background:var(--grad);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%); opacity:.35;
+  }
+  .empty-state b{display:block; font-size:16px; color:var(--dark); margin-bottom:4px; font-family:'Poppins',sans-serif;}
+
+  footer{text-align:center; padding:26px; font-size:12.5px; color:var(--dark2);}
+
+  @media (max-width:640px){
+    .header-inner img{height:44px;}
+    .header-title h1{font-size:16px;}
+    .hero{padding:34px 18px 26px;}
+    main{padding:22px 14px 60px;}
+  }

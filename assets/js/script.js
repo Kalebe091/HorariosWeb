@@ -22,6 +22,40 @@ function uniqueSorted(list){
   return [...new Set(list)].sort((a,b)=> a.localeCompare(b, 'pt-BR', {numeric:true}));
 }
 
+/* Extract individual semester numbers from strings like "2º e 3º SEMESTRE" -> ["2","3"] */
+function semestreTokens(str){
+  if(!str) return [];
+  const nums = str.match(/\d+/g) || [];
+  return [...new Set(nums)];
+}
+
+/* Extract individual turma codes from strings like "A123, B456" -> ["A123","B456"] */
+function turmaTokens(str){
+  if(!str) return [];
+  return str.split(',').map(s=>s.trim()).filter(Boolean);
+}
+
+/* Values for a filter field: dia keeps weekday order, semestre/turma are split into
+   individual options so combined cells (e.g. two semesters together) don't create
+   duplicate/garbled entries. */
+function fieldValues(key){
+  if(key === 'dia'){
+    const present = new Set(allData.map(d=>d.dia).filter(Boolean));
+    return [...present].sort((a,b)=> (DAY_ORDER[a]||99) - (DAY_ORDER[b]||99));
+  }
+  if(key === 'semestre'){
+    const nums = new Set();
+    allData.forEach(d => semestreTokens(d.semestre).forEach(n => nums.add(n)));
+    return [...nums].sort((a,b)=> parseInt(a,10) - parseInt(b,10));
+  }
+  if(key === 'turma'){
+    const set = new Set();
+    allData.forEach(d => turmaTokens(d.turma).forEach(t => set.add(t)));
+    return [...set].sort((a,b)=> a.localeCompare(b, 'pt-BR', {numeric:true}));
+  }
+  return uniqueSorted(allData.map(d => d[key]).filter(Boolean));
+}
+
 function visibleFieldsForMode(){
   if(mode === "student") return ["curso","semestre","turma"];
   if(mode === "teacher") return ["professor"];
@@ -39,7 +73,7 @@ function renderFilters(){
 
   grid.innerHTML = "";
   FIELDS.filter(f => visible.includes(f.key)).forEach(f=>{
-    const values = uniqueSorted(allData.map(d => d[f.key]).filter(Boolean));
+    const values = fieldValues(f.key);
     const wrap = document.createElement('div');
     wrap.className = 'field';
 
@@ -47,6 +81,12 @@ function renderFilters(){
       wrap.innerHTML = `<label for="filter-${f.key}">${f.label}</label>
         <input list="list-${f.key}" id="filter-${f.key}" placeholder="Digite seu nome...">
         <datalist id="list-${f.key}">${values.map(v=>`<option value="${escapeHtml(v)}">`).join('')}</datalist>`;
+    } else if(f.key === 'semestre'){
+      wrap.innerHTML = `<label for="filter-${f.key}">${f.label}</label>
+        <select id="filter-${f.key}">
+          <option value="">Todos</option>
+          ${values.map(v=>`<option value="${escapeHtml(v)}">${escapeHtml(v)}° Semestre</option>`).join('')}
+        </select>`;
     } else {
       wrap.innerHTML = `<label for="filter-${f.key}">${f.label}</label>
         <select id="filter-${f.key}">
@@ -77,13 +117,16 @@ function getFilteredSorted(){
   const visible = visibleFieldsForMode();
   let rows = allData.filter(row=>{
     for(const key of visible){
-      const fv = (activeFilters[key]||"").toLowerCase();
+      const fv = activeFilters[key] || "";
       if(!fv) continue;
-      const cell = (row[key]||"").toLowerCase();
       if(key === 'professor'){
-        if(!cell.includes(fv)) return false;
+        if(!(row.professor||'').toLowerCase().includes(fv.toLowerCase())) return false;
+      } else if(key === 'semestre'){
+        if(!semestreTokens(row.semestre).includes(fv)) return false;
+      } else if(key === 'turma'){
+        if(!turmaTokens(row.turma).includes(fv)) return false;
       } else {
-        if(cell !== fv) return false;
+        if((row[key]||'').toLowerCase() !== fv.toLowerCase()) return false;
       }
     }
     if(quickQuery){
